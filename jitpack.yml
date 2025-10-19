@@ -1,0 +1,3 @@
+install:
+  - echo "Running a custom install command"
+  - mvn clean source:jar install -pl .,obp-commons && mvn source:jar install -U -DskipTests -pl obp-api

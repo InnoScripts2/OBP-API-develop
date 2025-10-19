@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.tesobe</groupId>
+  <artifactId>obp-parent</artifactId>
+  <version>1.10.1</version>
+  <packaging>pom</packaging>
+  <name>Open Bank Project API Parent</name>
+  <inceptionYear>2011</inceptionYear>
+  <properties>
+    <scala.version>2.12</scala.version>
+    <scala.compiler>2.12.20</scala.compiler>
+    <akka.version>2.5.32</akka.version>
+    <avro.version>1.8.2</avro.version>
+    <lift.version>3.5.0</lift.version>
+    <jetty.version>9.4.50.v20221201</jetty.version>
+    <obp-ri.version>2016.11-RC6-SNAPSHOT</obp-ri.version>
+    <!-- Common plugin settings -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
+    <!-- vscaladoc settings -->
+    <maven.scaladoc.vscaladocVersion>1.2-m1</maven.scaladoc.vscaladocVersion>
+    <vscaladoc.links.liftweb.pathsufix>scaladocs/</vscaladoc.links.liftweb.pathsufix>
+    <vscaladoc.links.liftweb.baseurl>http://scala-tools.org/mvnsites/liftweb</vscaladoc.links.liftweb.baseurl>
+
+    <!--java version, can be: [8,9,10,11,12,13]-->
+    <java.version>11</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+  </properties>
+
+  <modules>
+    <module>obp-commons</module>
+    <module>obp-api</module>
+  </modules>
+
+  <repositories>
+    <repository>
+      <id>scala-tools.releases</id>
+      <name>Scala-Tools Dependencies Repository for Releases</name>
+      <url>https://oss.sonatype.org/content/repositories/releases/</url>
+    </repository>
+    <repository>
+      <id>java.net.maven3</id>
+      <name>java.net Maven3 Repository</name>
+      <url>http://download.java.net/maven/3/</url>
+    </repository>
+    <repository>
+      <id>scala-tools.snapshots</id>
+      <name>Scala-Tools Dependencies Repository for Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </repository>
+    <repository>
+      <id>git-OpenBankProject</id>
+      <name>OpenBankProject Git based repo</name>
+      <url>https://raw.githubusercontent.com/OpenBankProject/OBP-M2-REPO/master/</url>
+    </repository>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>org.sonatype.oss.groups.public</id>
+    <name>Sonatype Public</name>
+      <url>https://oss.sonatype.org/content/groups/public</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.tesobe</groupId>
+        <artifactId>obp-commons</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.liftweb</groupId>
+        <artifactId>lift-common_${scala.version}</artifactId>
+        <version>${lift.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.liftweb</groupId>
+        <artifactId>lift-util_${scala.version}</artifactId>
+        <version>${lift.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.liftweb</groupId>
+        <artifactId>lift-mapper_${scala.version}</artifactId>
+        <version>${lift.version}</version>
+      </dependency>
+      <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>3.12.0</version>
+      </dependency>
+      <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-text -->
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-text</artifactId>
+        <version>1.10.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.scalatest</groupId>
+        <artifactId>scalatest_${scala.version}</artifactId>
+        <version>3.0.8</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.scalactic</groupId>
+        <artifactId>scalactic_${scala.version}</artifactId>
+        <version>3.0.8</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>net.alchim31.maven</groupId>
+          <artifactId>scala-maven-plugin</artifactId>
+          <version>4.3.1</version>
+          <configuration>
+            <scalaVersion>${scala.compiler}</scalaVersion>
+            <charset>${project.build.sourceEncoding}</charset>
+            <displayCmd>true</displayCmd>
+            <jvmArgs>
+              <jvmArg>-DpackageLinkDefs=file://${project.build.directory}/packageLinkDefs.properties</jvmArg>
+              <jvmArg>-Xms64m</jvmArg>
+              <jvmArg>-Xmx1024m</jvmArg>
+            </jvmArgs>
+            <args>
+              <arg>-unchecked</arg>
+              <arg>-explaintypes</arg>
+              <!--
+              <arg>-verbose</arg>
+              <arg>-deprecation</arg>
+              -->
+            </args>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>compile</goal>
+                <goal>testCompile</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>scala-test-compile</id>
+              <phase>process-test-resources</phase>
+              <goals>
+                <goal>testCompile</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <!-- https://mvnrepository.com/artifact/org.scalatest/scalatest-maven-plugin -->
+        <plugin>
+          <groupId>org.scalatest</groupId>
+          <artifactId>scalatest-maven-plugin</artifactId>
+          <version>2.2.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${scala.version}</version>
+        <configuration>
+          <skipTests>true</skipTests>
+        </configuration>
+      </plugin>
+        <plugin>
+          <groupId>net.alchim31.maven</groupId>
+          <artifactId>scala-maven-plugin</artifactId>
+          <configuration>
+            <compilerPlugins>
+              <!--scala 2.12.x need the paradise plugin to support macros annotation, 2.13.x value not need this plugin,
+              just add -Ymacro-annotations flag -->
+              <compilerPlugin>
+                <groupId>org.scalamacros</groupId>
+                <artifactId>paradise_${scala.compiler}</artifactId>
+                <version>2.1.1</version>
+              </compilerPlugin>
+            </compilerPlugins>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.0.1</version>
+          <executions>
+            <execution>
+              <id>default-copy-resources</id>
+              <phase>process-resources</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <overwrite>true</overwrite>
+                <outputDirectory>${project.build.directory}</outputDirectory>
+                <resources>
+                  <resource>
+                    <directory>${project.basedir}/src</directory>
+                    <includes>
+                      <include>packageLinkDefs.properties</include>
+                    </includes>
+                    <filtering>true</filtering>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+<plugin>
+  <groupId>org.eclipse.jetty</groupId>
+  <artifactId>jetty-maven-plugin</artifactId>
+  <version>${jetty.version}</version>
+  <configuration>
+    <httpConnector>
+      <port>8080</port>
+    </httpConnector>
+    <systemProperties>
+      <systemProperty>
+        <name>org.eclipse.jetty.server.HttpConfiguration.requestHeaderSize</name>
+        <value>32768</value>
+      </systemProperty>
+      <systemProperty>
+        <name>org.eclipse.jetty.server.HttpConfiguration.responseHeaderSize</name>
+        <value>32768</value>
+      </systemProperty>
+    </systemProperties>
+  </configuration>
+</plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-idea-plugin</artifactId>
+          <version>2.2.1</version>
+          <configuration>
+            <downloadSources>true</downloadSources>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-eclipse-plugin</artifactId>
+          <version>2.10</version>
+          <configuration>
+            <downloadSources>true</downloadSources>
+            <additionalProjectnatures>
+              <projectnature>ch.epfl.lamp.sdt.core.scalanature</projectnature>
+            </additionalProjectnatures>
+            <additionalBuildcommands>
+              <buildcommand>ch.epfl.lamp.sdt.core.scalabuilder</buildcommand>
+            </additionalBuildcommands>
+            <classpathContainers>
+              <classpathContainer>ch.epfl.lamp.sdt.launching.SCALA_CONTAINER</classpathContainer>
+              <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
+            </classpathContainers>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>pl.project13.maven</groupId>
+          <artifactId>git-commit-id-plugin</artifactId>
+          <version>4.9.10</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>revision</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+            <generateGitPropertiesFile>true</generateGitPropertiesFile>
+            <generateGitPropertiesFilename>src/main/resources/git.properties</generateGitPropertiesFilename>
+            <failOnNoGitDirectory>false</failOnNoGitDirectory>
+          </configuration>
+        </plugin>
+
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.7.1</version>
+      </plugin>
+
+      </plugins>
+  </build>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>scala-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
+</project>

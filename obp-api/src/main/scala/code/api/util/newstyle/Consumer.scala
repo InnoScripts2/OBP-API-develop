@@ -1,0 +1,51 @@
+package code.api.util.newstyle
+
+import code.api.util.APIUtil.{OBPReturnType, unboxFull, unboxFullOrFail}
+import code.api.util.CallContext
+import code.api.util.ErrorMessages.CreateConsumerError
+import code.consumer.Consumers
+import code.model.{AppType, Consumer}
+
+import scala.concurrent.Future
+
+object Consumer {
+
+  import com.openbankproject.commons.ExecutionContext.Implicits.global
+
+  def createConsumerNewStyle(key: Option[String],
+                             secret: Option[String],
+                             isActive: Option[Boolean],
+                             name: Option[String],
+                             appType: Option[AppType],
+                             description: Option[String],
+                             developerEmail: Option[String],
+                             company: Option[String],
+                             redirectURL: Option[String],
+                             createdByUserId: Option[String],
+                             clientCertificate: Option[String],
+                             logoURL: Option[String],
+                             callContext: Option[CallContext]): OBPReturnType[Consumer] = {
+    Future {
+      Consumers.consumers.vend.createConsumer(
+        key,
+        secret,
+        isActive,
+        name,
+        appType,
+        description,
+        developerEmail,
+        redirectURL,
+        createdByUserId,
+        clientCertificate,
+        company,
+        logoURL
+      )
+    } map {
+      (_, callContext)
+    } map {
+      x => (unboxFullOrFail(x._1, callContext, CreateConsumerError, 400), x._2)
+    }
+  }
+
+
+}
