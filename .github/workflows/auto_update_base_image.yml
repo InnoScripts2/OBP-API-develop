@@ -17,7 +17,7 @@ jobs:
 
       - name: Docker Image Update Checker
         id: baseupdatecheck
-        uses: lucacome/docker-image-update-checker@v2.0.0
+        uses: lucacome/docker-image-update-checker@v3.0.0
         with:
           base-image: jetty:9.4-jdk11-alpine
           image: ${{ env.DOCKER_HUB_ORGANIZATION }}/obp-api:latest
